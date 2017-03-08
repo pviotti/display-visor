@@ -53,11 +53,17 @@ handle_args ()
 								lidstatus=$(cat /proc/acpi/button/lid/$lidswitch/state 2>/dev/null | awk '{print $NF}');;
 			-n | --notif )      notification=true;;
 			-e | --noecho )     noecho=true;;
-			-0 | --screen0 )    screen0=$2
+			-0 | --screen0 )
+                                            # full display name for xrandr
+                                            screen0full=$2
+                                            # remove dashes if present in name so that it can be used as variable name by bash
+                                            screen0=$(echo $2 | tr -d '-')
 								shift;;
-			-1 | --screen1 )    screen1=$2
+			-1 | --screen1 )    screen1full=$2
+                                            screen1=$(echo $2 | tr -d '-')
 								shift;;
-			-2 | --screen2 )    screen2=$2
+			-2 | --screen2 )    screen2full=$2
+                                            screen2=$(echo $2 | tr -d '-')
 								shift;;
 			-v | --version )	echo "display-visor v$version"
 								exit;;
@@ -132,25 +138,25 @@ config_closed_lid ()
 		user_output "Laptop display will be ignored unless -l option is set."
 	fi
 	if [ "${!screen1}" -a "${!screen2}" ]; then
-		user_output "SETTING: $screen1 (Primary) - $screen2 (Right)." 1 "$notif_header_outputchange"
-		xrandr --output $screen0 --off \
-			   --output $screen1 --auto --primary \
-			   --output $screen2 --auto --right-of $screen1
+		user_output "SETTING: $screen1full (Primary) - $screen2full (Right)." 1 "$notif_header_outputchange"
+		xrandr --output $screen0full --off \
+			   --output $screen1full --auto --primary \
+			   --output $screen2full --auto --right-of $screen1full
 	elif [ "${!screen1}" -a -z "${!screen2}" ]; then
-		user_output "SETTING: $screen1 (Primary)." 1 "$notif_header_outputchange"
-		xrandr --output $screen0 --off \
-			   --output $screen1 --auto --primary \
-			   --output $screen2 --off
+		user_output "SETTING: $screen1full (Primary)." 1 "$notif_header_outputchange"
+		xrandr --output $screen0full --off \
+			   --output $screen1full --auto --primary \
+			   --output $screen2full --off
 	elif [ -z "${!screen1}" -a "${!screen2}" ]; then
-		user_output "SETTING: $screen2 (Primary)." 1 "$notif_header_outputchange"
-		xrandr --output $screen0 --off \
-			   --output $screen1 --off \
-			   --output $screen2 --auto --primary
+		user_output "SETTING: $screen2full (Primary)." 1 "$notif_header_outputchange"
+		xrandr --output $screen0full --off \
+			   --output $screen1full --off \
+			   --output $screen2full --auto --primary
 	else
 		user_output "No external monitors are plugged in." 1 "$notif_header_outputchange"
-		xrandr --output $screen0 --auto --primary \
-			   --output $screen1 --off \
-			   --output $screen2 --off
+		xrandr --output $screen0full --auto --primary \
+			   --output $screen1full --off \
+			   --output $screen2full --off
 	fi
 }
 
@@ -159,30 +165,30 @@ config_open_lid ()
 {
 	user_output "Laptop lid is open."
 	if [ "${!screen1}" -a "${!screen2}" ]; then
-		user_output "$screen1 and $screen2 are plugged in."
-		user_output "SETTING: $screen1 (Primary) - $screen2 (Right)." 1 "$notif_header_outputchange"
-		xrandr --output $screen0 --off \
-			   --output $screen1 --auto --primary \
-			   --output $screen2 --auto --right-of $screen1
+		user_output "$screen1full and $screen2full are plugged in."
+		user_output "SETTING: $screen1full (Primary) - $screen2full (Right)." 1 "$notif_header_outputchange"
+		xrandr --output $screen0full --off \
+			   --output $screen1full --auto --primary \
+			   --output $screen2full --auto --right-of $screen1full
 	elif [ "${!screen1}" -a -z "${!screen2}" ]; then
 		# work mode: one big screen as main, laptop with smaller screen right of it
-		user_output "$screen1 is plugged in, but not $screen2. Work mode."
-		user_output "SETTING: $screen1 (Primary) - $screen0 (Right)." 1 "$notif_header_outputchange"
-		xrandr --output $screen1 --auto --primary \
-			   --output $screen0 --auto --right-of $screen1 \
-			   --output $screen2 --off
+		user_output "$screen1full is plugged in, but not $screen2full. Work mode."
+		user_output "SETTING: $screen1full (Primary) - $screen0full (Right)." 1 "$notif_header_outputchange"
+		xrandr --output $screen1full --auto --primary \
+			   --output $screen0full --auto --right-of $screen1full \
+			   --output $screen2full --off
 	elif [ -z "${!screen1}" -a "${!screen2}" ]; then
 		# presentation mode: laptop main screen, presentation on external output
-		user_output "$screen2 is plugged in, but not $screen1. Presentation mode."
-		user_output "SETTING: $screen0 (Primary) - $screen2 (Right)." 1 "$notif_header_outputchange"
-		xrandr --output $screen0 --auto --primary \
-			   --output $screen1 --off \
-			   --output $screen2 --auto --right-of $screen0
+		user_output "$screen2full is plugged in, but not $screen1full. Presentation mode."
+		user_output "SETTING: $screen0full (Primary) - $screen2full (Right)." 1 "$notif_header_outputchange"
+		xrandr --output $screen0full --auto --primary \
+			   --output $screen1full --off \
+			   --output $screen2full --auto --right-of $screen0full
 	else
 		user_output "No external monitors are plugged in." 1  "$notif_header_outputchange"
-		xrandr --output $screen0 --auto --primary \
-			   --output $screen1 --off \
-			   --output $screen2 --off
+		xrandr --output $screen0full --auto --primary \
+			   --output $screen1full --off \
+			   --output $screen2full --off
 	fi
 }
 
