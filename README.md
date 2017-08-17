@@ -1,20 +1,15 @@
 display-visor
-==================
+=============
 
 i3 does not manage displays and I move my laptop around a lot. This little script fills a much needed gap in my tiling window manager setup.
 
 How it works
 ------------
-When executed, it checks the available and connected display outputs and sets the optimal resolution for each (as determined by xrandr). It can then also reset the wallpaper. The script then waits for a signal to restart the procedure.
 
-At the moment I have three outputs defined: `LVDS1`, `HDMI1` and `VGA1`. For now, layout configuration is hard-coded. I am hoping to make this more dynamic.
+When executed, it checks the available and connected display outputs and sets the optimal resolution for each (as determined by xrandr). 
+The script then waits for a signal to restart the procedure.
 
-When lid is open (`-l`): LVDS (Primary) on left with HDMI or VGA on right. 
-My laptop can only handle two displays at a time, so if both HDMI and VGA are present, or... 
-
-When lid is closed: HDMI (Primary) on left with VGA on right.
-
-If you prefer, you could of course use [arandr](https://christian.amsuess.com/tools/arandr/) to generate layout scripts and replace my xrandr lines with those.
+At the moment I have two outputs defined: `eDP-1` and `DP-2-2`. For now, layout configuration is hard-coded. I am hoping to make this more dynamic.
 
 How to use it
 ------------
@@ -32,19 +27,19 @@ How to use it
 		-v, --version	Print version info.
 
 
-##### Start:
+## Start:
 Simply set the script to start upon login.
 
 i3wm config example:
 
     exec --no-startup-id display-visor -f -l
 
-##### Signal:
+## Signal:
 The script waits for a `RTMIN+5` real-time signal. This can be sent with pkill like so:
 
     pkill -x -RTMIN+5 display-visor
 
-##### Events:
+## Events:
 Some default event signallers are included.
 
  * __udev__ - A hotplug rule for when cables are (dis)connected.
@@ -61,6 +56,7 @@ Or manually with:
 
 Dependencies
 ------------
+
 * [xorg-xrandr](http://www.x.org/wiki/Projects/XRandR/)
 * [acpid](http://sourceforge.net/projects/acpid2/)(for lid events)
 
@@ -69,6 +65,6 @@ Notes
  [1] Remember to restart `acpid` service for this to take effect.
  [2] Please see [Issue #8](https://github.com/beanaroo/display-visor/issues/8)
 
-----
-####Credits
+
+## Credits
 I shamelessly stole some base functionality from [codingtony](https://github.com/codingtony/udev-monitor-hotplug). Thank you, kind sir.
