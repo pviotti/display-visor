@@ -1,7 +1,10 @@
 display-visor
 =============
 
-i3 does not manage displays and I move my laptop around a lot. This little script fills a much needed gap in my tiling window manager setup.
+This script, and related hooks, help updating the Xorg monitor configuration when dealing with multiple monitors.  
+It is useful for desktop environments and window managers (e.g., [i3wm](http://i3wm.org/)) that don't handle this.  
+
+This fork mainly adapts the original script to my work laptop and docking station, and fixes minor bugs.
 
 How it works
 ------------
@@ -9,15 +12,13 @@ How it works
 When executed, it checks the available and connected display outputs and sets the optimal resolution for each (as determined by xrandr). 
 The script then waits for a signal to restart the procedure.
 
-At the moment I have two outputs defined: `eDP-1` and `DP-2-2`. For now, layout configuration is hard-coded. I am hoping to make this more dynamic.
+At the moment two outputs are defined: `eDP-1` and `DP-2-2`. For now, layout configuration is hard-coded. I am hoping to make this more dynamic.
 
 How to use it
 ------------
 
     Usage: display-visor [-f] [-i] [-l [switch]]
 
-		-f, --feh	Run feh bg script.
-                             Executes ~/.fehbg upon completion.
 		-i, --i3	Test for i3wm instance.
                              For avoiding conflict with multiple environments.
 		-l, --lid	Check laptop lid status.
@@ -48,9 +49,10 @@ Some default event signallers are included.
 
 Installation
 ------------
- * Arch Linux - Available on the [AUR](https://aur.archlinux.org/packages/display-visor) as `display-visor`
 
-Or manually with:
+The original script can be installed on Arch Linux through the [AUR](https://aur.archlinux.org/packages/display-visor) as `display-visor`.  
+
+Or you can manually install it with:
 
     $ sudo make (un)install
 
@@ -66,5 +68,5 @@ Notes
  [2] Please see [Issue #8](https://github.com/beanaroo/display-visor/issues/8)
 
 
-## Credits
-I shamelessly stole some base functionality from [codingtony](https://github.com/codingtony/udev-monitor-hotplug). Thank you, kind sir.
+Credits: [codingtony](https://github.com/codingtony/udev-monitor-hotplug)
+
