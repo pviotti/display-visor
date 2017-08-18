@@ -56,8 +56,7 @@ Or you can manually install it with:
 
     $ sudo make (un)install
 
-Dependencies
-------------
+#### Dependencies
 
 * [xorg-xrandr](http://www.x.org/wiki/Projects/XRandR/)
 * [acpid](http://sourceforge.net/projects/acpid2/)(for lid events)
