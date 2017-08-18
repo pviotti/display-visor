@@ -28,19 +28,19 @@ How to use it
 		-v, --version	Print version info.
 
 
-## Start:
+#### Start:
 Simply set the script to start upon login.
 
 i3wm config example:
 
     exec --no-startup-id display-visor -f -l
 
-## Signal:
+#### Signal:
 The script waits for a `RTMIN+5` real-time signal. This can be sent with pkill like so:
 
     pkill -x -RTMIN+5 display-visor
 
-## Events:
+#### Events:
 Some default event signallers are included.
 
  * __udev__ - A hotplug rule for when cables are (dis)connected.
